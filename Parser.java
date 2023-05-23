@@ -17,163 +17,48 @@ public class Parser {
 		Variable var = new Variable(tokens.get(0));
         Application app;
         int paren = 0;
-        int closeParenIndex = 0;
-        int i = 2;
+        ArrayList<Integer> depthMap = new ArrayList<Integer>(tokens.size());
+        int numTopLevels = 0;
+        int level = 0;
 
-        if (tokens.size() > 1) {
-
-            app = new Application(var, new Variable(tokens.get(1)));
-
-
-            // If first token == "("
-            if (tokens.get(0).equals("(")) {
-                i = 0;
-                    
-                paren = 1;
-                for (int j = 1; j < tokens.size(); j++) {
-                    if (tokens.get(j).equals("(")) {
-                        paren++;
-                    }
-
-                    else if (tokens.get(j).equals(")")) {
-                        paren--; 
-                        if (paren == 0) {
-
-                            closeParenIndex = j;
-                            while (tokens.get(i+1).equals("(") && tokens.get(j - 1).equals(")")) {
-                                i++;
-                                j--;
-                            }
-
-                            System.out.println(tokens.subList(i+1, j));
-
-                            if (closeParenIndex == tokens.size() - 1) {
-                                return parse(new ArrayList<String>(tokens.subList(i + 1, j)));
-                            }
-
-                            else {
-                                app = new Application(parse(new ArrayList<String>(tokens.subList(i + 1, j))), parse(new ArrayList<String>(tokens.subList(closeParenIndex + 1, tokens.size()))));
-                            }
-                            
-                        }
-                    }
-
-                    
-                    
-                }
-
-                paren = 0;
-                i = tokens.size();
-
-            }
-
-            // if index 1 == "("
-            else if (tokens.get(1).equals("(")) {
-                i = 1;
-                    
-                paren = 1;
-                for (int j = 2; j < tokens.size(); j++) {
-                    if (tokens.get(j).equals("(")) {
-                        paren++;
-                    }
-
-                    else if (tokens.get(j).equals(")")) {
-                        paren--; 
-                        if (paren == 0) {
-
-                            closeParenIndex = j;
-                            while (tokens.get(i+1).equals("(") && tokens.get(j - 1).equals(")")) {
-                                i++;
-                                j--;
-                            }
-
-                            System.out.println(tokens.subList(i+1, j));
-                            app = new Application(var, parse(new ArrayList<String>(tokens.subList(i + 1, j))));
-                        }
-                    }
-
-                    
-                    
-                }
-
-                paren = 0;
-                i = closeParenIndex + 1;
-                
-
+        // set the depthMap and number of levels
+        for (int i = 0; i < tokens.size(); i++) {
+            if (tokens.get(i).equals("(")) {
+                depthMap.set(i, level);
+                level += 1;
+                if (level == 0) numTopLevels += 1;
             }
 
             else {
-
-            }
-            
-            
-
-            
-            for (i = i; i < tokens.size(); i++) {
-
-                if (tokens.get(i).equals("(")) {
-                    
-                    paren = 1;
-                    for (int j = i + 1; j < tokens.size(); j++) {
-                        if (tokens.get(j).equals("(")) {
-                            paren++;
-                        }
-    
-                        else if (tokens.get(j).equals(")")) {
-                            paren--; 
-                            if (paren == 0) {
-
-                                closeParenIndex = j;
-
-
-                                boolean cont = true;
-
-                                for (int k = i + 1; k < tokens.size(); k++) {
-                                    if (k != tokens.size() && tokens.get(k).equals(")")) {
-                                        System.out.println("RAAAAAA");
-                                        app = new Application(app, parse(new ArrayList<String>(tokens.subList(i + 1, j))));
-                                        cont = false;
-                                    }
-                                }
-
-                                if (cont) {
-                                    while (tokens.get(i+1).equals("(") && tokens.get(j - 1).equals(")")) {
-                                    i++;
-                                    j--;
-                                }
-
-
-                                System.out.println(tokens.subList(i+1, j));
-                                System.out.println(closeParenIndex);
-                                app = new Application(app, parse(new ArrayList<String>(tokens.subList(i + 1, j))));
-                                }
-
-                                
-                            }
-                        }
-
-                        
-                        
-                    }
-
-                    paren = 0;
-                    i = closeParenIndex + 1;
-                    // System.out.println(i);
-                    // ((a b) (c d))
-                    // (((a)) (c d)) --> ((a)) (c d)
-
-                }
-
-                else {
-                    app = new Application(app, new Variable(tokens.get(i)));
-                }
-                
+                depthMap.set(i, level);
             }
         }
 
-        else {
+        if (tokens.size() == 1) {
             return var;
         }
+
+        // if there's only one top level, return only a Var
+        else if (numTopLevels == 1 && tokens.get(0).equals("(") && tokens.get(tokens.size() - 1).equals(")")) {
+
+
+            // if > size 1, parse the innards
+            else {
+                parse(new ArrayList<>(tokens.subList(1, tokens.size() - 2)));
+            }
+        } 
+
+        for (int i = 0; i < tokens.size(); i++) {
+            if (depthMap.get(i) == 0) {
+                for (int j = i + 1; j < tokens.size(); j++) {
+                    if (depthMap.get(j) == 0) {
+                        parse(sub)
+                    }
+                }
+            }
+        }
+
+        
 		
 
 		

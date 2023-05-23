@@ -12,7 +12,7 @@ public class Console {
 		in = new Scanner (System.in);
 		
 		Lexer lexer = new Lexer();
-		Parser parser = new Parser();
+		ParserBAD parser = new ParserBAD();
 		
 		String input = cleanConsoleInput();  // see comment
 		
