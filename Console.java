@@ -12,7 +12,7 @@ public class Console {
 		in = new Scanner (System.in);
 		
 		Lexer lexer = new Lexer();
-		ParserBAD parser = new ParserBAD();
+		Parser parser = new Parser();
 		
 		String input = cleanConsoleInput();  // see comment
 		
@@ -20,6 +20,9 @@ public class Console {
 			
 			ArrayList<String> tokens = lexer.tokenize(input);
 
+			System.out.println("#######################");
+			System.out.println(parser.preParser(lexer.tokenize("a \\b.c")));
+			System.out.println("#######################");
 
 			String output = "";
 			
