@@ -1,14 +1,23 @@
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
 
 public class Console {
 	private static Scanner in;
+	private static Dictionary<String, Expression> vars = new Hashtable<String, Expression>();
+
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ParseException {
+		String keyDic = null;
+		Expression expDic = null;
+
 		in = new Scanner (System.in);
 		
 		Lexer lexer = new Lexer();
@@ -17,30 +26,55 @@ public class Console {
 		String input = cleanConsoleInput();  // see comment
 		
 		while (! input.equalsIgnoreCase("exit")) {
-			
 			ArrayList<String> tokens = lexer.tokenize(input);
 
-			System.out.println("#######################");
-			System.out.println(parser.preParser(lexer.tokenize("a \\b.c")));
-			System.out.println("#######################");
+			if (tokens.size() > 1 && tokens.get(1).equals("=")) {
+				System.out.println(tokens.subList(2, tokens.size()));
+				keyDic = tokens.get(0);
 
-			String output = "";
-			
-			try {
-				Expression exp = parser.parse(tokens);
-				output = exp.toString();
-			} catch (Exception e) {
-				System.out.println("Unparsable expression, input was: \"" + input + "\"");
+				if (vars.get(keyDic) != null) {
+					System.out.println(keyDic + " is already defined. ");
+				}
+
+				else {
+					expDic = parser.parse(new ArrayList<>(tokens.subList(2, tokens.size())));
+					vars.put(keyDic, expDic);
+
+					System.out.println("Added " + expDic + " as " + keyDic);
+				}
+
+				
+
 				input = cleanConsoleInput();
-				continue;
 			}
 			
-			System.out.println(output);
-			
-			input = cleanConsoleInput();
+			else {
+				
+
+				System.out.println("#######################");
+				System.out.println(parser.preParser(lexer.tokenize("a \\b.c")));
+				System.out.println("#######################");
+
+				String output = "";
+				
+				try {
+					Expression exp = parser.parse(tokens);
+					output = exp.toString();
+				} catch (Exception e) {
+					System.out.println("Unparsable expression, input was: \"" + input + "\"");
+					input = cleanConsoleInput();
+					continue;
+				}
+				
+				System.out.println(output);
+				
+				input = cleanConsoleInput();
+			}
 		}
 		System.out.println("Goodbye!");
 	}
+
+	
 
 	
 	
@@ -52,6 +86,16 @@ public class Console {
 	 * and (4) replace all λs with backslashes.
 	 */
 	
+
+	// Getter for dic
+	public static Dictionary<String, Expression> getVars() {
+		return vars;
+	}
+
+
+
+
+
 	private static String cleanConsoleInput() {
 		System.out.print("> ");
 		String raw = in.nextLine();

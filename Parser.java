@@ -35,22 +35,10 @@ public class Parser {
         Variable varF = null;
         Expression expF = null;
 
-        Variable varDic= null;
-        Expression expDic = null;
 
-
-        Dictionary<Variable, Expression> vars = new Hashtable<Variable, Expression>();
-
-        System.out.println("RAWRRRRRRR");
+        System.out.println("RAWRRRRRRR"); 
         System.out.println(tokens);
-        if (tokens.size() > 1) {
-            if (tokens.get(1).equals("=")) {
-                varDic = new Variable(tokens.get(0));
-                expDic = parse(new ArrayList<>(tokens.subList(2, tokens.size())));
-                vars.put(varDic, expDic);
-                System.out.println("Added " + expDic + " as " + varDic);
-            }
-        }
+
 
         // set the depthMap and number of levels
         for (int i = 0; i < tokens.size(); i++) {
@@ -82,6 +70,16 @@ public class Parser {
 
 
         if (tokens.size() == 1) {
+
+            System.out.println(Console.getVars());
+            exp = Console.getVars().get(tokens.get(0));
+            System.out.println(exp == null);
+
+            System.out.println(Console.getVars().keys());
+
+            if (!(exp == null)) {
+                return Console.getVars().get(tokens.get(0));
+            }
             return var;
         }
 
