@@ -22,6 +22,7 @@ public class Console {
 		
 		Lexer lexer = new Lexer();
 		Parser parser = new Parser();
+		Runner runner = new Runner();
 		
 		String input = cleanConsoleInput();  // see comment
 		
@@ -44,6 +45,18 @@ public class Console {
 				}
 
 				
+
+				input = cleanConsoleInput();
+			}
+
+			else if (tokens.get(0).equalsIgnoreCase("run")) {
+				System.out.println(tokens);
+
+				
+
+
+				System.out.println(Runner.run(parser.parse(new ArrayList<>(tokens.subList(1, tokens.size())))));
+				// Runner.run(parser.parse(new ArrayList<>(tokens.subList(1, tokens.size()))));
 
 				input = cleanConsoleInput();
 			}

@@ -11,4 +11,12 @@ public class Function implements Expression {
     public String toString() {
 		return "(\\" + var + "." + exp + ")";
 	}
+
+    public Variable getVar() {
+        return var;
+    }
+
+    public Expression getExp() {
+        return exp;
+    }
 }
