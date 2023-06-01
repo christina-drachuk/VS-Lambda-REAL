@@ -7,36 +7,70 @@ public class Runner {
 
         Lexer lexer = new Lexer();
 		Parser parser = new Parser();
-        boolean inside = false;
 
-        if (exp instanceof Application && ((Application) exp).getLeft() instanceof Function) {
-            Application app = (Application) exp;
+        if (exp instanceof Application) {
+            Application app = ((Application) exp);
+            if (app.getLeft() instanceof Function) {
 
-            ArrayList<String> tokens = lexer.tokenize(((Function) app.getLeft()).getExp().toString());
 
-            for (int i = 0; i < tokens.size(); i++) {
-                if (tokens.get(i).equals("(") && tokens.get(i + 1).equals("\\")) {
-                    inside = true;
+                
+                // Left
+                Function func = (Function) app.getLeft();
+                Variable funcVar = func.getVar();
+                Expression funcExp = func.getExp();
+                ArrayList<String> funcExpTokens = lexer.tokenize(funcExp.toString());
+
+                // Right
+                Expression replace = app.getRight();
+
+                
+                // Check if IN subFunction
+                boolean inside = false;
+                int paren = 0;
+
+                for (int i = 0; i < funcExpTokens.size(); i++) {
+
+                    if (!inside && funcExpTokens.get(i).equals("\\") && funcExpTokens.get(i + 1).equals(funcVar.toString())) {
+                        inside = true;
+                        paren = 1; 
+                    }
+
+                    else if (inside && funcExpTokens.get(i).equals("(")) {
+                        paren++;
+                    }
+
+                    else if (inside && funcExpTokens.get(i).equals(")")) {
+                        paren--;
+                        if (paren == 0) {
+                            inside = false;
+                        }
+                    }
+
+
+                    if (!inside && funcExpTokens.get(i).equals(funcVar.toString())) {
+                        funcExpTokens.remove(i);
+                        funcExpTokens.addAll(i, lexer.tokenize(replace.toString()));
+
+                        i = i + lexer.tokenize(replace.toString()).size();
+                    }
                 }
 
-                else if (tokens.get(i).equals(")")) inside = false;
+                return run(parser.parse(funcExpTokens));
 
-                else if (tokens.get(i).equals(((Function) app.getLeft()).getVar().toString()) && !inside) {
-
-                    
-
-                    tokens.remove(i);
-                    tokens.addAll(i, lexer.tokenize(app.getRight().toString()));
-                }
             }
 
-            exp = parser.parse(tokens);
-            run(exp);
-
-            
-
+            else {
+                return new Application(run(app.getLeft()), run(app.getRight()));
+            }
         }
+
+        else if (exp instanceof Variable || exp instanceof Expression) {
+            return exp;
+        }
+
         
-        return exp;
+       
+
+        return null;
     }
 }

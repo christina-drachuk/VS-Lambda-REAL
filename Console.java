@@ -22,7 +22,6 @@ public class Console {
 		
 		Lexer lexer = new Lexer();
 		Parser parser = new Parser();
-		Runner runner = new Runner();
 		
 		String input = cleanConsoleInput();  // see comment
 		
@@ -38,7 +37,14 @@ public class Console {
 				}
 
 				else {
-					expDic = parser.parse(new ArrayList<>(tokens.subList(2, tokens.size())));
+					if (tokens.get(2).equalsIgnoreCase("run")) {
+						expDic = Runner.run(parser.parse(new ArrayList<>(tokens.subList(3, tokens.size()))));
+					}
+
+					else {
+						expDic = parser.parse(new ArrayList<>(tokens.subList(2, tokens.size())));
+					}
+					
 					vars.put(keyDic, expDic);
 
 					System.out.println("Added " + expDic + " as " + keyDic);
