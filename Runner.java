@@ -8,7 +8,14 @@ public class Runner {
         Lexer lexer = new Lexer();
 		Parser parser = new Parser();
 
-        if (exp instanceof Application) {
+        if (exp instanceof Function) {
+            Function func = (Function) exp;
+            Variable funcVar = func.getVar();
+            Expression funcExp = func.getExp();
+            return new Function(funcVar, run(funcExp));
+        }
+
+        else if (exp instanceof Application) {
             Application app = ((Application) exp);
             if (app.getLeft() instanceof Function) {
 
@@ -22,11 +29,93 @@ public class Runner {
 
                 // Right
                 Expression replace = app.getRight();
+                ArrayList<String> replaceTokens = lexer.tokenize(replace.toString());
+
 
                 
                 // Check if IN subFunction
                 boolean inside = false;
                 int paren = 0;
+
+                ArrayList<String> freeVars = new ArrayList<>();
+                ArrayList<String> boundVars = new ArrayList<>();
+
+                for (int i = 0; i < funcExpTokens.size(); i++) { 
+
+                    String var = funcExpTokens.get(i).toString();
+
+                    
+
+                    boolean insideFree = false;
+                    int parenFree = 0;
+
+                    for (int k = 0; k < funcExpTokens.size(); k++) {
+                        if (funcExpTokens.get(i).equals("\\")) {
+                            if (!boundVars.contains(funcExpTokens.get(i + 1))) {
+                                boundVars.add(funcExpTokens.get(i + 1));
+                            }
+                            
+                        }
+                    }
+
+                    for (int k = 0; k < replaceTokens.size(); k++) {
+
+                        if (!insideFree && replaceTokens.get(k).equals("\\")) {
+                            insideFree = true;
+                            parenFree = 1; 
+                        }
+    
+                        else if (insideFree && replaceTokens.get(k).equals("(")) {
+                            parenFree++;
+                        }
+    
+                        else if (insideFree && replaceTokens.get(k).equals(")")) {
+                            parenFree--;
+                            if (parenFree == 0) {
+                                insideFree = false;
+                            }
+                        }
+    
+    
+                        if (!insideFree && "()\\.=".indexOf(var) == -1) {
+                            if (!freeVars.contains(replaceTokens.get(k))) {
+                                freeVars.add(replaceTokens.get(k));
+                            }
+                            
+                        }
+                    }
+                    
+                    System.out.println("Free: " + freeVars + "--> Bound: " + boundVars);
+
+                    if ("()\\.=".indexOf(var) == -1) {
+                        // If var is a free variable
+                        // \x1.x1
+                        if (freeVars.contains(var) && boundVars.contains(var)) {
+                            String newVar = "WRONG";
+
+                            for (int j = 0; j < var.length(); j++) {
+                                char character = var.charAt(j);
+                                
+
+                                // Check if 0-9
+                                if ((int) character >= 48 && (int) character <= 57) {
+
+                                    newVar = var.substring(0, j) + (Integer.parseInt(var.substring(j, var.length())) + 1);
+                                    j = var.length() - 1;
+                                }
+
+                                else if (j == var.length() - 1) {
+                                    newVar = var + 1;
+                                }
+
+
+                            }
+
+                            funcExpTokens.set(i, newVar);
+                        }
+                    }
+
+                }
 
                 for (int i = 0; i < funcExpTokens.size(); i++) {
 
@@ -60,7 +149,14 @@ public class Runner {
             }
 
             else {
-                return new Application(run(app.getLeft()), run(app.getRight()));
+                app = new Application(run(app.getLeft()), run(app.getRight()));
+                if (app.getLeft() instanceof Function) {
+                    return run(app);
+                }
+
+
+                
+                return app;
             }
         }
 

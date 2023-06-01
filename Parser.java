@@ -18,9 +18,6 @@ public class Parser {
 	public Expression parse(ArrayList<String> tokens) throws ParseException {
 		tokens = preParser(tokens);
 
-        System.out.println("---------------------");
-        System.out.println(tokens);
-        System.out.println("---------------------");
 
 		Variable var = new Variable(tokens.get(0));
         Application app = new Application(null, null);
@@ -36,8 +33,6 @@ public class Parser {
         Expression expF = null;
 
 
-        System.out.println("RAWRRRRRRR"); 
-        System.out.println(tokens);
 
 
         // set the depthMap and number of levels
@@ -63,19 +58,16 @@ public class Parser {
 
         }
 
-        for (int i = 0; i < depthMap.length; i++) {
-            System.out.print(depthMap[i] + " ");
-        }
-        System.out.println(" level = " + numTopLevels);
+
 
 
         if (tokens.size() == 1) {
 
-            System.out.println(Console.getVars());
-            exp = Console.getVars().get(tokens.get(0));
-            System.out.println(exp == null);
 
-            System.out.println(Console.getVars().keys());
+            exp = Console.getVars().get(tokens.get(0));
+
+
+
 
             if (!(exp == null)) {
                 return Console.getVars().get(tokens.get(0));
@@ -88,14 +80,8 @@ public class Parser {
 
 
             
-            System.out.println("HERE");
-            System.out.println(tokens.subList(1, tokens.size()-1));
-
-            System.out.println(tokens.get(1));
-            System.out.println(tokens.get(1).equals("\\"));
-
+        
             if (tokens.get(1).equals("\\")) {
-                System.out.println("functionizer");
                 varF = new Variable(tokens.get(2));
                 expF = parse(new ArrayList<>(tokens.subList(4, tokens.size() - 1)));
                 
@@ -112,7 +98,6 @@ public class Parser {
 
 
         else {
-            System.out.println(tokens);
 
 
 
@@ -126,28 +111,23 @@ public class Parser {
                         
                         
                         if (depthMap[j] == 0) {
-                            System.out.print(tokens.subList(i, j));
-                            System.out.print(" + ");
-                            System.out.print(tokens.subList(j , tokens.size()));
+
 
                             if (count == 0) {
                                 exp = parse(new ArrayList<>(tokens.subList(i, j)));
-                                System.out.print("EXP: ");
-                                System.out.println(exp);
+
                                 count++;
                             }
 
                             else if (count == 1) {
                                 app = new Application(exp, parse(new ArrayList<>(tokens.subList(i, j))));
-                                System.out.print("APP: ");
-                                System.out.println(app);
+
                                 count++;
                             }
 
                             else {
                                 app = new Application(app, parse(new ArrayList<>(tokens.subList(i, j))));
-                                System.out.print("APP: ");
-                                System.out.println(app);
+
                             }
 
                             i = j;
@@ -160,15 +140,13 @@ public class Parser {
                         else if (tokens.get(j).equals(")") && j == tokens.size() - 1) {
                             if (count == 1) {
                                 app = new Application(exp, parse(new ArrayList<>(tokens.subList(i, tokens.size()))));
-                                System.out.print("APP: ");
-                                System.out.println(app);
+
                                 count++;
                             }
         
                             else {
                                 app = new Application(app, parse(new ArrayList<>(tokens.subList(i, tokens.size()))));
-                                System.out.print("APP: ");
-                                System.out.println(app);
+
                             }
 
                             end = true;
@@ -178,22 +156,19 @@ public class Parser {
                     if (!end) {
                         if (count == 0) {
                             exp = parse(new ArrayList<>(tokens.subList(i, tokens.size())));
-                            System.out.print("EXP: ");
-                            System.out.println(exp);
+
                             count++;
                         }
     
                         else if (count == 1) {
                             app = new Application(exp, parse(new ArrayList<>(tokens.subList(i, tokens.size()))));
-                            System.out.print("APP: ");
-                            System.out.println(app);
+
                             count++;
                         }
     
                         else {
                             app = new Application(app, parse(new ArrayList<>(tokens.subList(i, tokens.size()))));
-                            System.out.print("APP: ");
-                            System.out.println(app);
+
                         }
                     }
                 }
@@ -214,7 +189,7 @@ public class Parser {
 		}
 
 		
-        System.out.println("_________");
+
 		return app;
 	}
 

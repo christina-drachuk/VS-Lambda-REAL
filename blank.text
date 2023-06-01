@@ -1,0 +1,27 @@
+// ArrayList<String> freeVars = new ArrayList<>();
+                    // boolean insideFree = false;
+                    // int parenFree = 0;
+
+                    // for (int k = 0; k < replaceTokens.size(); k++) {
+
+                    //     if (!insideFree && replaceTokens.get(k).equals("\\")) {
+                    //         insideFree = true;
+                    //         parenFree = 1; 
+                    //     }
+    
+                    //     else if (insideFree && replaceTokens.get(k).equals("(")) {
+                    //         parenFree++;
+                    //     }
+    
+                    //     else if (insideFree && replaceTokens.get(k).equals(")")) {
+                    //         parenFree--;
+                    //         if (parenFree == 0) {
+                    //             insideFree = false;
+                    //         }
+                    //     }
+    
+    
+                    //     if (!insideFree) {
+                    //         freeVars.add(replaceTokens.get(k));
+                    //     }
+                    // }

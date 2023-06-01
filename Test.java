@@ -4,23 +4,23 @@ import java.util.ArrayList;
 
 public class Test {
     public static void main(String[] args) throws ParseException {
-        ArrayList<String> test1 = new ArrayList<>();
-        test1.add("a");
-        test1.add("b");
-        test1.add("c");
+        // ArrayList<String> test1 = new ArrayList<>();
+        // test1.add("a");
+        // test1.add("b");
+        // test1.add("c");
 
-        ArrayList<String> test2 = new ArrayList<>();
-        test2.add("d");
-        test2.add("e");
-        test2.add("f");
+        // ArrayList<String> test2 = new ArrayList<>();
+        // test2.add("d");
+        // test2.add("e");
+        // test2.add("f");
 
-        System.out.println(test1);
+        // System.out.println(test1);
 
-        test1.remove(1);
-        test1.addAll(1, test2);
+        // test1.remove(1);
+        // test1.addAll(1, test2);
 
         
-        System.out.println(test1);
+        // System.out.println(test1);
 
         // Lexer lexer = new Lexer();
 		// Parser parser = new Parser();
@@ -43,5 +43,13 @@ public class Test {
         // else if (exp instanceof Expression) {
         //     System.out.println("exp");
         // }
+
+        int i = 0;
+
+        String s= "a " + (1 + 1);
+
+        System.out.println(s);
+
+
     }
 }

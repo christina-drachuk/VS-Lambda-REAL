@@ -29,7 +29,6 @@ public class Console {
 			ArrayList<String> tokens = lexer.tokenize(input);
 
 			if (tokens.size() > 1 && tokens.get(1).equals("=")) {
-				System.out.println(tokens.subList(2, tokens.size()));
 				keyDic = tokens.get(0);
 
 				if (vars.get(keyDic) != null) {
@@ -56,7 +55,7 @@ public class Console {
 			}
 
 			else if (tokens.get(0).equalsIgnoreCase("run")) {
-				System.out.println(tokens);
+
 
 				
 
@@ -70,9 +69,7 @@ public class Console {
 			else {
 				
 
-				System.out.println("#######################");
-				System.out.println(parser.preParser(lexer.tokenize("a \\b.c")));
-				System.out.println("#######################");
+
 
 				String output = "";
 				
