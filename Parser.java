@@ -252,4 +252,104 @@ public class Parser {
 
         return newTokens;
     }
+
+    // public ArrayList<String> preParser(ArrayList<String> tokens) {
+
+    //     int n;
+
+    //     // wrap expression in parens
+
+    //     for (int i = 0; i < tokens.size(); i++) {
+
+    //         if (tokens.get(i).equals("\\")) {
+
+    //             if (i == 0 || !tokens.get(i-1).equals("(")) {
+
+    //                 tokens.add(i, "(");
+
+    //                 n = i;
+
+    //                 int o = 0;
+
+    //                 int c = 0;
+
+    //                 while (n < tokens.size() && c <= o) {
+
+    //                     if (tokens.get(n).equals("(")) {
+
+    //                         o++;
+
+    //                     } else if (tokens.get(n).equals(")")) {
+
+    //                         c++;
+
+    //                     }
+
+    //                     n++;
+
+    //                 }
+
+    //                 tokens.add(n, ")");
+
+    //             }
+
+    //         }
+
+    //     }
+
+    //     // eat up things to the right
+
+    //     for (int i = 0; i < tokens.size(); i++) {
+
+    //         if (tokens.get(i).equals(".")) {
+
+    //             if (i == 0 || !tokens.get(i+1).equals("(")) {
+
+    //                 tokens.add(i+1, "(");
+
+    //                 n = i+2;
+
+    //                 int o = 1;
+
+    //                 int c = 0;
+
+    //                 while (n < tokens.size() && c < o) { // PROBLEM TO FIX, reason \a.a works is bc exit condition not c and o like meant
+
+    //                     //System.out.println(tokens.get(n));
+
+    //                     if (tokens.get(n).equals("(")) {
+
+    //                         o++;
+
+    //                     } else if (tokens.get(n).equals(")") && c+1 < o) {
+
+    //                         c++;
+
+    //                         tokens.add(i+1, "(");
+
+    //                         tokens.add(n+1, ")");
+
+    //                         n+= 2;
+
+    //                     } else if (tokens.get(n).equals(")")) {
+
+    //                         c++;
+
+    //                     }
+
+    //                     n++;
+
+    //                 }
+
+    //                 tokens.add(n, ")");
+
+    //             }
+
+    //         }
+
+    //     }
+
+    //     return tokens;
+
+    // }
 }

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.xml.crypto.dsig.keyinfo.KeyValue;
+
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -11,7 +14,7 @@ import java.util.Hashtable;
 
 public class Console {
 	private static Scanner in;
-	private static Dictionary<String, Expression> vars = new Hashtable<String, Expression>();
+	private static Hashtable<String, Expression> vars = new Hashtable<String, Expression>();
 
 	
 	public static void main(String[] args) throws ParseException {
@@ -28,7 +31,11 @@ public class Console {
 		while (! input.equalsIgnoreCase("exit")) {
 			ArrayList<String> tokens = lexer.tokenize(input);
 
-			if (tokens.size() > 1 && tokens.get(1).equals("=")) {
+			if (tokens.size() == 0) {
+				input = cleanConsoleInput();
+			}
+
+			else if (tokens.size() > 1 && tokens.get(1).equals("=")) {
 				keyDic = tokens.get(0);
 
 				if (vars.get(keyDic) != null) {
@@ -54,13 +61,17 @@ public class Console {
 				input = cleanConsoleInput();
 			}
 
-			else if (tokens.get(0).equalsIgnoreCase("run")) {
+			else if (tokens.size() > 1 && tokens.get(0).equalsIgnoreCase("run")) {
 
 
 				
 
-
-				System.out.println(Runner.run(parser.parse(new ArrayList<>(tokens.subList(1, tokens.size())))));
+				Expression output = Runner.run(parser.parse(new ArrayList<>(tokens.subList(1, tokens.size()))));
+				
+				for (String key: Expression exp) {
+					
+				}
+				System.out.println();
 				// Runner.run(parser.parse(new ArrayList<>(tokens.subList(1, tokens.size()))));
 
 				input = cleanConsoleInput();
@@ -74,6 +85,11 @@ public class Console {
 				String output = "";
 				
 				try {
+
+					if (tokens.size() == 0) {
+						break;
+					}
+
 					Expression exp = parser.parse(tokens);
 					output = exp.toString();
 				} catch (Exception e) {

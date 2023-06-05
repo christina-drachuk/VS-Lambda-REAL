@@ -161,6 +161,7 @@ public class Runner {
         }
 
         else if (exp instanceof Variable || exp instanceof Expression) {
+            System.out.println("end");
             return exp;
         }
 
