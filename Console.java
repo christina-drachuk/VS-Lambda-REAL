@@ -2,6 +2,7 @@
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -64,14 +65,28 @@ public class Console {
 			else if (tokens.size() > 1 && tokens.get(0).equalsIgnoreCase("run")) {
 
 
+				// Make a parsed expression *parser.parse()
+
+				// make the run method take two expressions, feed it the same thing twice
+
 				
 
 				Expression output = Runner.run(parser.parse(new ArrayList<>(tokens.subList(1, tokens.size()))));
 				
-				for (String key: Expression exp) {
-					
+				System.out.println(output.equals(vars.get("false")));
+
+				for (Entry<String, Expression> setVar : vars.entrySet()) {
+					System.out.print(setVar.getKey() + " : ");
+					System.out.println(setVar.getValue());
+
+					if (setVar.getValue().equals(output)) {
+						output = parser.parse(lexer.tokenize(setVar.getKey()));
+						break;
+					}
 				}
-				System.out.println();
+				
+
+				System.out.println(output);
 				// Runner.run(parser.parse(new ArrayList<>(tokens.subList(1, tokens.size()))));
 
 				input = cleanConsoleInput();
