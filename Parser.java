@@ -439,7 +439,8 @@ public class Parser {
             while (inside) {
                 
                 i++;
-                if (first && tokens.get(i).equals("\\")) {first = false; includeParen = false;}
+                if (first && tokens.get(i).equals("\\")) includeParen = false;
+                first = false;
 
                 if (i != tokens.size()) current = tokens.get(i);
 
