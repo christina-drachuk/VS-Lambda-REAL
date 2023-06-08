@@ -22,8 +22,8 @@ public class Test {
         
         // System.out.println(test1);
 
-        // Lexer lexer = new Lexer();
-		// Parser parser = new Parser();
+        Lexer lexer = new Lexer();
+		Parser parser = new Parser();
 
 
         // Expression exp = parser.parse(lexer.tokenize("(((λx.x) y) z)"));
@@ -44,11 +44,9 @@ public class Test {
         //     System.out.println("exp");
         // }
 
-        int i = 0;
-
-        String s= "a " + (1 + 1);
-
-        System.out.println(s);
+        
+        System.out.println(parser.preParser(lexer.tokenize("\\x.(((a)))")));
+        System.out.println(parser.parse(lexer.tokenize("\\x.(x a)")));
 
 
     }

@@ -73,20 +73,26 @@ public class Console {
 
 				Expression output = Runner.run(parser.parse(new ArrayList<>(tokens.subList(1, tokens.size()))));
 				
-				System.out.println(output.equals(vars.get("false")));
 
+
+
+				boolean replaced = false;
 				for (Entry<String, Expression> setVar : vars.entrySet()) {
 					System.out.print(setVar.getKey() + " : ");
 					System.out.println(setVar.getValue());
 
-					if (setVar.getValue().equals(output)) {
-						output = parser.parse(lexer.tokenize(setVar.getKey()));
+					if (setVar.getValue().toString().equals(output.toString())) {
+
+						System.out.println(setVar.getKey());
+
+						replaced = true; 
+
 						break;
 					}
 				}
 				
 
-				System.out.println(output);
+				if (!replaced) System.out.println(output);
 				// Runner.run(parser.parse(new ArrayList<>(tokens.subList(1, tokens.size()))));
 
 				input = cleanConsoleInput();

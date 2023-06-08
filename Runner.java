@@ -5,6 +5,23 @@ import java.util.ArrayList;
 public class Runner {
     public static Expression run(Expression exp) throws ParseException {
 
+
+        // if (exp instanceof Function) {
+        //     System.out.print("FuncVar: " + ((Function) exp).getVar() + " -- FuncExp: ");
+        //     System.out.println(((Function) exp).getExp());
+        // }
+
+        // else if (exp instanceof Application) {
+        //     System.out.print("Left: " + ((Application) exp).getLeft() + " -- Right: ");
+        //     System.out.println(((Application) exp).getRight());
+        // }
+
+        // else if (exp instanceof Variable) {
+        //     System.out.println("Variable: " + exp);
+        // }
+        
+        // else System.out.println("Expression: " +  exp);
+
         Lexer lexer = new Lexer();
 		Parser parser = new Parser();
 
@@ -28,7 +45,7 @@ public class Runner {
                 ArrayList<String> funcExpTokens = lexer.tokenize(funcExp.toString());
 
                 // Right
-                Expression replace = app.getRight();
+                Expression replace = run(app.getRight());
                 ArrayList<String> replaceTokens = lexer.tokenize(replace.toString());
 
 
@@ -85,7 +102,7 @@ public class Runner {
                         }
                     }
                     
-                    System.out.println("Free: " + freeVars + "--> Bound: " + boundVars);
+                    // System.out.println("Free: " + freeVars + "--> Bound: " + boundVars);
 
                     if ("()\\.=".indexOf(var) == -1) {
                         // If var is a free variable
@@ -117,6 +134,12 @@ public class Runner {
 
                 }
 
+
+                for (String x : funcExpTokens) {
+                    System.out.print(x + " ");
+                }
+                System.out.println();
+
                 for (int i = 0; i < funcExpTokens.size(); i++) {
 
                     if (!inside && funcExpTokens.get(i).equals("\\") && funcExpTokens.get(i + 1).equals(funcVar.toString())) {
@@ -143,6 +166,11 @@ public class Runner {
                         i = i + lexer.tokenize(replace.toString()).size();
                     }
                 }
+                // System.out.println(funcExpTokens);
+                for (String x : funcExpTokens) {
+                    System.out.print(x + " ");
+                }
+                System.out.println();
 
                 return run(parser.parse(funcExpTokens));
 
@@ -161,7 +189,7 @@ public class Runner {
         }
 
         else if (exp instanceof Variable || exp instanceof Expression) {
-            System.out.println("end");
+            // System.out.println("end");
             return exp;
         }
 
