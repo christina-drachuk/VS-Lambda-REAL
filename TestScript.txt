@@ -1,0 +1,98 @@
+; Make sure comments work!	> 	///0
+Correct-Answer! ; Comment is here!	> Correct-Answer!	///5
+           No-Spaces?-Correct-Answer!       	> No-Spaces?-Correct-Answer!	///1
+false = \f.\x.x	> Added (\f.(\x.x)) as false	///0
+true = \x.\y.x	> Added (\x.(\y.x)) as true	///0
+and = \p.\q.p q p	> Added (\p.(\q.((p q) p))) as and	///0
+run and false false	> false	///1
+run and false true	> false	///1
+run and true false	> false	///1
+run and true true	> true	///2
+or = \p.\q.p p q	> Added (\p.(\q.((p p) q))) as or	///0
+run or false false	> false	///2
+run or false true	> true	///1
+run or true false	> true	///1
+run or true true	> true	///1
+not = \p.p false true	> Added (\p.((p (\f.(\x.x))) (\x.(\y.x)))) as not	///0
+run not false	> true	///2
+run not true	> false	///3
+xor = \p.\q.p (not q) q	> Added (\p.(\q.((p ((\p.((p (\f.(\x.x))) (\x.(\y.x)))) q)) q))) as xor	///0
+run xor false false	> false	///1
+run xor false true	> true	///2
+run xor true false	> true	///1
+run xor true true	> false	///1
+if = \b.\T.\F.((b T) F)	> Added (\b.(\T.(\F.((b T) F)))) as if	///0
+run (if (and true false) WRONG-ANSWER Correct-Answer!)	> Correct-Answer!	///5
+NUMBER-OPERATIONS	> NUMBER-OPERATIONS	///0
+succ = \n.\f.\x.f (n f x)	> Added (\n.(\f.(\x.(f ((n f) x))))) as succ	///0
+pred = \n.\f.\x.n (\g.\h.h (g f)) (\u.x) (\u.u)	> Added (\n.(\f.(\x.(((n (\g.(\h.(h (g f))))) (\u.x)) (\u.u))))) as pred	///0
++ = \m.\n.\f.\x.(m f) ((n f) x)	> Added (\m.(\n.(\f.(\x.((m f) ((n f) x)))))) as +	///0
+* = \n.\m.\f.\x.n (m f) x	> Added (\n.(\m.(\f.(\x.((n (m f)) x))))) as *	///0
+- = \m.\n.(n pred) m	> Added (\m.(\n.((n (\n.(\f.(\x.(((n (\g.(\h.(h (g f))))) (\u.x)) (\u.u)))))) m))) as -	///0
+0 = \f.\x.x    ; same as false	> Added (\f.(\x.x)) as 0	///1
+1 = run succ 0	> Added (\f.(\x.(f x))) as 1	///1
+2 = run succ 1	> Added (\f.(\x.(f (f x)))) as 2	///1
+3 = run + 2 1	> Added (\f.(\x.(f (f (f x))))) as 3	///1
+4 = run * 2 2	> Added (\f.(\x.(f (f (f (f x)))))) as 4	///1
+5 = (\f.(\x.(f (f (f (f (f x)))))))	> Added (\f.(\x.(f (f (f (f (f x))))))) as 5	///1
+6 = run pred (pred (succ (+ 2 5)))	> Added (\f.(\x.(f (f (f (f (f (f x)))))))) as 6	///1
+7 = run succ (succ 5)	> Added (\f.(\x.(f (f (f (f (f (f (f x))))))))) as 7	///1
+8 = run - (* 5 2) 2	> Added (\f.(\x.(f (f (f (f (f (f (f (f x)))))))))) as 8	///1
+9 = run (* (pred 4) (- 7 4))	> Added (\f.(\x.(f (f (f (f (f (f (f (f (f x))))))))))) as 9	///1
+10 = run succ (+ 3 6)	> Added (\f.(\x.(f (f (f (f (f (f (f (f (f (f x)))))))))))) as 10	///1
+even? = \n.n not true	> Added (\n.((n (\p.((p (\f.(\x.x))) (\x.(\y.x))))) (\x.(\y.x)))) as even?	///0
+run (if (even? 2) Correct-Answer! WRONG-ANSWER!)	> Correct-Answer!	///2
+run (if (even? 1) WRONG-ANSWER Correct-Answer!)	> Correct-Answer!	///3
+odd? = \x.not (even? x)	> Added (\x.((\p.((p (\f.(\x.x))) (\x.(\y.x)))) ((\n.((n (\p.((p (\f.(\x.x))) (\x.(\y.x))))) (\x.(\y.x)))) x))) as odd?	///0
+run (if (odd? 5) Correct-Answer! WRONG-ANSWER!)	> Correct-Answer!	///3
+run (if (odd? 6) WRONG-ANSWER Correct-Answer!)	> Correct-Answer!	///2
+zero? = \n.n (\x.false) true	> Added (\n.((n (\x.(\f.(\x.x)))) (\x.(\y.x)))) as zero?	///0
+run (if (zero? (- 2 2)) Correct-Answer! WRONG-ANSWER!)	> Correct-Answer!	///2
+run (if (zero? (+ 0 1)) WRONG-ANSWER Correct-Answer!)	> Correct-Answer!	///3
+leq? = \m.\n.zero?(- m n)	> Added (\m.(\n.((\n.((n (\x.(\f.(\x.x)))) (\x.(\y.x)))) (((\m.(\n.((n (\n.(\f.(\x.(((n (\g.(\h.(h (g f))))) (\u.x)) (\u.u)))))) m))) m) n)))) as leq?	///0
+run (if (leq? 2 5) Correct-Answer! WRONG-ANSWER!)	> Correct-Answer!	///2
+run (if (leq? 5 5) Correct-Answer! WRONG-ANSWER!)	> Correct-Answer!	///2
+run (if (leq? 7 5) WRONG-ANSWER Correct-Answer!)	> Correct-Answer!	///1
+lt? = \a.\b.not (leq? b a)	> Added (\a.(\b.((\p.((p (\f.(\x.x))) (\x.(\y.x)))) (((\m.(\n.((\n.((n (\x.(\f.(\x.x)))) (\x.(\y.x)))) (((\m.(\n.((n (\n.(\f.(\x.(((n (\g.(\h.(h (g f))))) (\u.x)) (\u.u)))))) m))) m) n)))) b) a)))) as lt?	///0
+run (if (lt? 2 5) Correct-Answer! WRONG-ANSWER!)	> Correct-Answer!	///2
+run (if (lt? 5 5) WRONG-ANSWER Correct-Answer!)	> Correct-Answer!	///1
+run (if (lt? 7 5) WRONG-ANSWER Correct-Answer!)	> Correct-Answer!	///2
+gt? = \a.\b.not (leq? a b)	> Added (\a.(\b.((\p.((p (\f.(\x.x))) (\x.(\y.x)))) (((\m.(\n.((\n.((n (\x.(\f.(\x.x)))) (\x.(\y.x)))) (((\m.(\n.((n (\n.(\f.(\x.(((n (\g.(\h.(h (g f))))) (\u.x)) (\u.u)))))) m))) m) n)))) a) b)))) as gt?	///0
+run (if (gt? 2 5) WRONG-ANSWER Correct-Answer!)	> Correct-Answer!	///1
+run (if (gt? 5 5) WRONG-ANSWER Correct-Answer!)	> Correct-Answer!	///2
+run (if (gt? 7 5) Correct-Answer! WRONG-ANSWER!)	> Correct-Answer!	///2
+eq? = \m.\n.and (leq? m n) (leq? n m)	> Added (\m.(\n.(((\p.(\q.((p q) p))) (((\m.(\n.((\n.((n (\x.(\f.(\x.x)))) (\x.(\y.x)))) (((\m.(\n.((n (\n.(\f.(\x.(((n (\g.(\h.(h (g f))))) (\u.x)) (\u.u)))))) m))) m) n)))) m) n)) (((\m.(\n.((\n.((n (\x.(\f.(\x.x)))) (\x.(\y.x)))) (((\m.(\n.((n (\n.(\f.(\x.(((n (\g.(\h.(h (g f))))) (\u.x)) (\u.u)))))) m))) m) n)))) n) m)))) as eq?	///0
+run (if (eq? 5 5) Correct-Answer! WRONG-ANSWER!)	> Correct-Answer!	///3
+run (if (eq? 2 5) WRONG-ANSWER Correct-Answer!)	> Correct-Answer!	///2
+neq? = \a.\b.(not (eq? a b))	> Added (\a.(\b.((\p.((p (\f.(\x.x))) (\x.(\y.x)))) (((\m.(\n.(((\p.(\q.((p q) p))) (((\m.(\n.((\n.((n (\x.(\f.(\x.x)))) (\x.(\y.x)))) (((\m.(\n.((n (\n.(\f.(\x.(((n (\g.(\h.(h (g f))))) (\u.x)) (\u.u)))))) m))) m) n)))) m) n)) (((\m.(\n.((\n.((n (\x.(\f.(\x.x)))) (\x.(\y.x)))) (((\m.(\n.((n (\n.(\f.(\x.(((n (\g.(\h.(h (g f))))) (\u.x)) (\u.u)))))) m))) m) n)))) n) m)))) a) b)))) as neq?	///0
+run (if (neq? 2 5) Correct-Answer! WRONG-ANSWER!)	> Correct-Answer!	///2
+run (if (neq? 5 5) WRONG-ANSWER Correct-Answer!)	> Correct-Answer!	///3
+geq? = \a.\b.(leq? b a)	> Added (\a.(\b.(((\m.(\n.((\n.((n (\x.(\f.(\x.x)))) (\x.(\y.x)))) (((\m.(\n.((n (\n.(\f.(\x.(((n (\g.(\h.(h (g f))))) (\u.x)) (\u.u)))))) m))) m) n)))) b) a))) as geq?	///0
+run (if (geq? 7 5) Correct-Answer! WRONG-ANSWER!)	> Correct-Answer!	///2
+run (if (geq? 5 5) Correct-Answer! WRONG-ANSWER!)	> Correct-Answer!	///2
+run (if (geq? 2 5) WRONG-ANSWER Correct-Answer!)	> Correct-Answer!	///1
+cons = \x.\y.\f.f x y	> Added (\x.(\y.(\f.((f x) y)))) as cons	///0
+run (cons A B)	> (\f.((f A) B))	///5
+car = \p.p true	> Added (\p.(p (\x.(\y.x)))) as car	///0
+run (car (cons Correct-Answer! WRONG-ANSWER!))	> Correct-Answer!	///5
+cdr = \p.p false	> Added (\p.(p (\f.(\x.x)))) as cdr	///0
+run (cdr (cons WRONG-ANSWER! Correct-Answer!))	> Correct-Answer!	///5
+null = \x.true	> Added (\x.(\x.(\y.x))) as null	///0
+cats = (cons C (cons A (cons T (cons S null))))	> Added (((\x.(\y.(\f.((f x) y)))) C) (((\x.(\y.(\f.((f x) y)))) A) (((\x.(\y.(\f.((f x) y)))) T) (((\x.(\y.(\f.((f x) y)))) S) (\x.(\x.(\y.x))))))) as cats	///0
+run (car cats)	> C	///1
+run (car (cdr cats))	> A	///1
+run (car (cdr (cdr cats)))	> T	///1
+run (car (cdr (cdr (cdr cats))))	> S	///1
+null? = \p.p (\x.\y.false)	> Added (\p.(p (\x.(\y.(\f.(\x.x)))))) as null?	///0
+run (if (null? cats) WRONG-ANSWER! Correct-Answer!)	> Correct-Answer!	///3
+run (if (null? (cdr (cdr (cdr (cdr cats))))) Correct-Answer! WRONG-ANSWER!)	> Correct-Answer!	///2
+Y = \f. (\x. f(x x)) (\x. f(x x))	> Added (\f.((\x.(f (x x))) (\x.(f (x x))))) as Y	///0
+factorial = Y \f.\n.(if (zero? n) 1 (* n (f (- n 1))))	> Added ((\f.((\x.(f (x x))) (\x.(f (x x))))) (\f.(\n.((((\b.(\T.(\F.((b T) F)))) ((\n.((n (\x.(\f.(\x.x)))) (\x.(\y.x)))) n)) (\f.(\x.(f x)))) (((\n.(\m.(\f.(\x.((n (m f)) x))))) n) (f (((\m.(\n.((n (\n.(\f.(\x.(((n (\g.(\h.(h (g f))))) (\u.x)) (\u.u)))))) m))) n) (\f.(\x.(f x)))))))))) as factorial	///0
+run (if (eq? (factorial 3) 6) Correct-Answer! WRONG-ANSWER!)	> Correct-Answer!	///5
+divpair = Y (\g.\q.\a.\b. lt? a b (cons q a) (g (succ q) (- a b) b)) 0	> Added (((\f.((\x.(f (x x))) (\x.(f (x x))))) (\g.(\q.(\a.(\b.(((((\a.(\b.((\p.((p (\f.(\x.x))) (\x.(\y.x)))) (((\m.(\n.((\n.((n (\x.(\f.(\x.x)))) (\x.(\y.x)))) (((\m.(\n.((n (\n.(\f.(\x.(((n (\g.(\h.(h (g f))))) (\u.x)) (\u.u)))))) m))) m) n)))) b) a)))) a) b) (((\x.(\y.(\f.((f x) y)))) q) a)) (((g ((\n.(\f.(\x.(f ((n f) x))))) q)) (((\m.(\n.((n (\n.(\f.(\x.(((n (\g.(\h.(h (g f))))) (\u.x)) (\u.u)))))) m))) a) b)) b))))))) (\f.(\x.x))) as divpair	///0
+run (if (eq? (car (divpair 5 2)) 2) Correct-Answer! WRONG-ANSWER!)	> Correct-Answer!	///2
+run (if (eq? (cdr (divpair 5 2)) 1) Correct-Answer! WRONG-ANSWER!)	> Correct-Answer!	///3
+/ = \a.\b. car (divpair a b)	> Added (\a.(\b.((\p.(p (\x.(\y.x)))) (((((\f.((\x.(f (x x))) (\x.(f (x x))))) (\g.(\q.(\a.(\b.(((((\a.(\b.((\p.((p (\f.(\x.x))) (\x.(\y.x)))) (((\m.(\n.((\n.((n (\x.(\f.(\x.x)))) (\x.(\y.x)))) (((\m.(\n.((n (\n.(\f.(\x.(((n (\g.(\h.(h (g f))))) (\u.x)) (\u.u)))))) m))) m) n)))) b) a)))) a) b) (((\x.(\y.(\f.((f x) y)))) q) a)) (((g ((\n.(\f.(\x.(f ((n f) x))))) q)) (((\m.(\n.((n (\n.(\f.(\x.(((n (\g.(\h.(h (g f))))) (\u.x)) (\u.u)))))) m))) a) b)) b))))))) (\f.(\x.x))) a) b)))) as /	///0
+run (if (eq? (/ 9 4) 2) Correct-Answer! WRONG-ANSWER!)	> Correct-Answer!	///5
+mod = \a.\b. cdr (divpair a b)	> Added (\a.(\b.((\p.(p (\f.(\x.x)))) (((((\f.((\x.(f (x x))) (\x.(f (x x))))) (\g.(\q.(\a.(\b.(((((\a.(\b.((\p.((p (\f.(\x.x))) (\x.(\y.x)))) (((\m.(\n.((\n.((n (\x.(\f.(\x.x)))) (\x.(\y.x)))) (((\m.(\n.((n (\n.(\f.(\x.(((n (\g.(\h.(h (g f))))) (\u.x)) (\u.u)))))) m))) m) n)))) b) a)))) a) b) (((\x.(\y.(\f.((f x) y)))) q) a)) (((g ((\n.(\f.(\x.(f ((n f) x))))) q)) (((\m.(\n.((n (\n.(\f.(\x.(((n (\g.(\h.(h (g f))))) (\u.x)) (\u.u)))))) m))) a) b)) b))))))) (\f.(\x.x))) a) b)))) as mod	///0
+run (if (eq? (mod 9 4) 1) Correct-Answer! WRONG-ANSWER!)	> Correct-Answer!	///5

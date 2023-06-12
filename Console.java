@@ -14,9 +14,12 @@ import java.util.Hashtable;
 
 
 
+
+
 public class Console {
 	private static Scanner in;
 	private static Hashtable<String, Expression> vars = new Hashtable<String, Expression>();
+	public static String latestPrint;
 
 	
 	public static void main(String[] args) throws ParseException {
@@ -31,6 +34,7 @@ public class Console {
 		String input = cleanConsoleInput();  // see comment
 		
 		while (! input.equalsIgnoreCase("exit")) {
+			latestPrint = "";
 			ArrayList<String> tokens = lexer.tokenize(input);
 
 			if (tokens.size() == 0) {
@@ -55,6 +59,7 @@ public class Console {
 					
 					vars.put(keyDic, expDic);
 
+					latestPrint = "Added " + expDic + " as " + keyDic;
 					System.out.println("Added " + expDic + " as " + keyDic);
 				}
 
@@ -84,6 +89,7 @@ public class Console {
 
 					if (setVar.getValue().toString().equals(output.toString())) {
 
+						latestPrint = setVar.getKey();
 						System.out.println(setVar.getKey());
 
 						replaced = true; 
@@ -93,6 +99,7 @@ public class Console {
 				}
 				
 
+				latestPrint = output.toString();
 				if (!replaced) System.out.println(output);
 				// Runner.run(parser.parse(new ArrayList<>(tokens.subList(1, tokens.size()))));
 
@@ -120,6 +127,7 @@ public class Console {
 					continue;
 				}
 				
+				latestPrint = output;
 				System.out.println(output);
 				
 				input = cleanConsoleInput();
@@ -142,7 +150,7 @@ public class Console {
 	
 
 	// Getter for dic
-	public static Dictionary<String, Expression> getVars() {
+	public static Hashtable<String, Expression> getVars() {
 		return vars;
 	}
 

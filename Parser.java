@@ -254,19 +254,19 @@ public class Parser {
 
         int elementCount = 0;
 
-        for (String x : tokens) {
-            System.out.print(x + " ");
-        }
-        System.out.println();
+        // for (String x : tokens) {
+        //     System.out.print(x + " ");
+        // }
+        // System.out.println();
 
         for (int x : depthMap) {
-            System.out.print(x + " ");
+            // System.out.print(x + " ");
             if (x == 0) {
                 elementCount++;
             }
         }
-        System.out.println();
-        System.out.println("ELEMENT COUNT : " + elementCount);
+        // System.out.println();
+        // System.out.println("ELEMENT COUNT : " + elementCount);
 
         if (elementCount == 1) {
 

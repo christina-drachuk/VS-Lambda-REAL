@@ -155,10 +155,10 @@ public class Runner {
                 }
 
 
-                for (String x : funcExpTokens) {
-                    System.out.print(x + " ");
-                }
-                System.out.println();
+                // for (String x : funcExpTokens) {
+                //     System.out.print(x + " ");
+                // }
+                // System.out.println();
 
                 for (int i = 0; i < funcExpTokens.size(); i++) {
 
@@ -189,10 +189,10 @@ public class Runner {
                     }
                 }
                 // System.out.println(funcExpTokens);
-                for (String x : funcExpTokens) {
-                    System.out.print(x + " ");
-                }
-                System.out.println();
+                // for (String x : funcExpTokens) {
+                //     System.out.print(x + " ");
+                // }
+                // System.out.println();
 
                 return run(parser.parse(funcExpTokens));
 
@@ -216,7 +216,7 @@ public class Runner {
                     Function leftFunc = (Function) app.getLeft();
                     Variable leftVar = leftFunc.getVar();
                     Expression leftExp = leftFunc.getExp();
-                    return substitute(leftExp, leftVar, app.getRight());
+                    return run(substitute(leftExp, leftVar, app.getRight()));
                 }
                 return app;
             } 
