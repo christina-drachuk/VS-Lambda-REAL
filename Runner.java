@@ -1,9 +1,12 @@
 import java.applet.AppletContext;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Runner {
     public static Expression run(Expression exp) throws ParseException {
+
+        
 
 
         // if (exp instanceof Function) {
@@ -22,8 +25,25 @@ public class Runner {
         
         // else System.out.println("Expression: " +  exp);
 
+
+
         Lexer lexer = new Lexer();
 		Parser parser = new Parser();
+
+
+        // Replace variables
+        // ArrayList<String> rTokens = lexer.tokenize(exp.toString());
+
+        // for (String x : rTokens) {
+        //     if (Console.getVars().get(x) != null) {
+        //         x = Console.getVars().get(x).toString();
+        //     }
+        // }
+
+        // exp = parser.parse(rTokens);
+
+
+
 
         if (exp instanceof Function) {
             Function func = (Function) exp;
@@ -164,6 +184,8 @@ public class Runner {
                         funcExpTokens.addAll(i, lexer.tokenize(replace.toString()));
 
                         i = i + lexer.tokenize(replace.toString()).size();
+
+                        i--;
                     }
                 }
                 // System.out.println(funcExpTokens);
@@ -176,15 +198,35 @@ public class Runner {
 
             }
 
+            // else {
+            //     app = new Application(run(app.getLeft()), run(app.getRight()));
+            //     if (app.getLeft() instanceof Function) {
+            //         return run(app);
+            //     }
+
+
+                
+            //     return app;
+            // }
+
+            else {
+                if (app.getLeft() instanceof Function) {
+                app = new Application(run(app.getLeft()), run(app.getRight()));
+                if (app.getLeft() instanceof Function) {
+                    Function leftFunc = (Function) app.getLeft();
+                    Variable leftVar = leftFunc.getVar();
+                    Expression leftExp = leftFunc.getExp();
+                    return substitute(leftExp, leftVar, app.getRight());
+                }
+                return app;
+            } 
             else {
                 app = new Application(run(app.getLeft()), run(app.getRight()));
                 if (app.getLeft() instanceof Function) {
                     return run(app);
                 }
-
-
-                
                 return app;
+            }
             }
         }
 
@@ -198,4 +240,31 @@ public class Runner {
 
         return null;
     }
+
+    private static Expression substitute(Expression exp, Variable variable, Expression substitution) {
+    if (exp instanceof Variable) {
+        Variable var = (Variable) exp;
+        if (var.equals(variable)) {
+            return substitution;
+        } else {
+            return var;
+        }
+    } else if (exp instanceof Function) {
+        Function func = (Function) exp;
+        Variable var = func.getVar();
+        Expression body = func.getExp();
+        Expression newBody = substitute(body, variable, substitution);
+        return new Function(var, newBody);
+    } else if (exp instanceof Application) {
+        Application app = (Application) exp;
+        Expression left = app.getLeft();
+        Expression right = app.getRight();
+        Expression newLeft = substitute(left, variable, substitution);
+        Expression newRight = substitute(right, variable, substitution);
+        return new Application(newLeft, newRight);
+    } else {
+        // Return the expression as is if it doesn't match any of the above cases
+        return exp;
+    }
+}
 }

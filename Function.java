@@ -15,8 +15,14 @@ public class Function implements Expression {
     public Variable getVar() {
         return var;
     }
+    
+
 
     public Expression getExp() {
         return exp;
     }
+
+
+    
 }
+

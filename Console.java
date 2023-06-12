@@ -13,6 +13,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 
 
+
 public class Console {
 	private static Scanner in;
 	private static Hashtable<String, Expression> vars = new Hashtable<String, Expression>();

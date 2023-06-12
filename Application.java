@@ -12,6 +12,18 @@ public class Application implements Expression {
         return right;
     }
 
+    
+
+    public void setLeft(Expression left) {
+        this.left = left;
+    }
+
+    public void setRight(Expression right) {
+        this.right = right;
+    }
+
+
+
     private Expression right;
 
     public Application(Expression left, Expression right) {
@@ -23,4 +35,5 @@ public class Application implements Expression {
     public String toString() {
 		return "(" + left + " " + right + ")";
 	}
+
 }
