@@ -17,6 +17,7 @@ import java.util.Hashtable;
 
 
 public class Console {
+	
 	private static Scanner in;
 	public static Hashtable<String, Expression> vars = new Hashtable<String, Expression>();
 	public static String latestPrint;

@@ -1,49 +1,55 @@
 
-
 public class Function implements Expression {
-    public Variable variable;
-    public Expression expression;
 
-    public Function(Variable variable, Expression expression) {
-        this.variable = variable;
-        this.expression = expression;
+    public Variable var;
+    public Expression exp;
+
+    public Function(Variable var, Expression exp) {
+        this.var = var;
+        this.exp = exp;
     }
 
     public Function copy() {
-        return new Function(variable.copy(), expression.copy());
+        return new Function(var.copy(), exp.copy());
     }
 
-    public Expression sub(Variable oldVar, Expression newExp) {
-        if (this.variable.equals(oldVar)) {
+    public Expression sub(Variable originalVar, Expression newExp) {
+
+        if (this.var.equals(originalVar)) {
             return this;
-        } else {
+        }
+
+        else {
             Function func = this.copy();
             // bounded variable found that matches name of freevar, needs to be swapped
-            if (newExp instanceof Variable && Runner.freeVarNames.contains(((Variable) newExp).name)) {
-                Variable var = (Variable)newExp;
-                String newVarName = this.variable.name;
-                int counter = 0;
-                while (Runner.freeVarNames.contains(newVarName)) {
-                    ++counter;
-                    newVarName = this.variable.name + counter;
+            if (newExp instanceof Variable && Runner.freeVarNames.contains(((Variable) newExp).varName)) {
+                Variable var = (Variable) newExp;
+                String newName = this.var.varName;
+                int count = 0;
+                
+                while (Runner.freeVarNames.contains(newName) == true) {
+                    ++count;
+                    newName = this.var.varName + count;
                 }
-                func.variable.name = newVarName;
-                func.expression = func.expression.sub(this.variable, new Variable(newVarName));
+                
+                func.var.varName = newName;
+                func.exp = func.exp.sub(this.var, new Variable(newName));
             }
-            func.expression = func.expression.sub(oldVar, newExp);
+            func.exp = func.exp.sub(originalVar, newExp);
             return func;
         }
-    }
-
-    public String toString() {
-        return "(λ" + variable + "." + expression + ")";
     }
 
     public boolean equals(Expression other) {
         if (other instanceof Function) {
             Function func = (Function) other;
-            return this.variable.equals(func.variable) && this.expression.equals(func.expression);
+            return this.var.equals(func.var) && this.exp.equals(func.exp);
         }
         return false;
     }
+
+    public String toString() {
+        return "(λ" + var + "." + exp + ")";
+    }
+    
 }

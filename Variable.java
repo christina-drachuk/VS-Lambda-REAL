@@ -1,31 +1,32 @@
 
 public class Variable implements Expression {
-    public String name;
+    
+    public String varName;
 
-    public Variable(String name) {
-        this.name = name;
+    public Variable(String varName) {
+        this.varName = varName;
     }
 
-    public Variable copy() {
-        return new Variable(name);
-    }
-
-    public Expression sub(Variable v, Expression e) {
-        if (this.equals(v)) {
-            return e;
+    public Expression sub(Variable var, Expression exp) {
+        if (this.equals(var)) {
+            return exp;
         }
         return this;
-    }
-
-    public String toString() {
-        return name;
     }
 
     public boolean equals(Expression other) {
         if (other instanceof Variable) {
             Variable var = (Variable) other;
-            return this.name.equals(var.name);
+            return this.varName.equals(var.varName);
         }
         return false;
+    }
+
+    public String toString() {
+        return varName;
+    }
+
+    public Variable copy() {
+        return new Variable(varName);
     }
 }
