@@ -16,7 +16,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class Test2 {
+public class Tester {
     public static String latestPrint = "";
     public static int totalPoints = 0;
 	public static int testNum = 1;
