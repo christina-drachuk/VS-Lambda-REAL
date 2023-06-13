@@ -1,3 +1,5 @@
+// Writen by Tyler Meletiche and Christina Drachuk
+// Version 1.0 (funny)
 
 import java.text.ParseException;
 import java.util.ArrayList;
