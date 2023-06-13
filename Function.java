@@ -9,19 +9,18 @@ public class Function implements Expression {
         this.exp = exp;
     }
 
-    public Function copy() {
-        return new Function(var.copy(), exp.copy());
+    public Function deepCopy() {
+        return new Function(var.deepCopy(), exp.deepCopy());
     }
 
-    public Expression sub(Variable originalVar, Expression newExp) {
+    public Expression substitute(Variable originalVar, Expression newExp) {
 
         if (this.var.equals(originalVar)) {
             return this;
         }
 
         else {
-            Function func = this.copy();
-            // bounded variable found that matches name of freevar, needs to be swapped
+            Function func = this.deepCopy();
             if (newExp instanceof Variable && Runner.freeVarNames.contains(((Variable) newExp).varName)) {
                 Variable var = (Variable) newExp;
                 String newName = this.var.varName;
@@ -33,9 +32,9 @@ public class Function implements Expression {
                 }
                 
                 func.var.varName = newName;
-                func.exp = func.exp.sub(this.var, new Variable(newName));
+                func.exp = func.exp.substitute(this.var, new Variable(newName));
             }
-            func.exp = func.exp.sub(originalVar, newExp);
+            func.exp = func.exp.substitute(originalVar, newExp);
             return func;
         }
     }

@@ -1,7 +1,7 @@
 public interface Expression {
-    Expression sub(Variable var, Expression exp);
+    Expression substitute(Variable var, Expression exp);
     
-    Expression copy();
+    Expression deepCopy();
 
     boolean equals(Expression other);
 }

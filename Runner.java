@@ -30,14 +30,14 @@ public class Runner {
                 Function func = (Function) app.leftExp;
                 Variable var = func.var;
                 Expression funcExp = func.exp;
-                Expression subExpression = app.rightExp.copy();
+                Expression subExpression = app.rightExp.deepCopy();
 
                 if (subExpression instanceof Variable) {
                     Variable freeVar = (Variable) subExpression;
                     freeVarNames.add(freeVar.varName);
                 }
 
-                return funcExp.sub(var, subExpression);
+                return funcExp.substitute(var, subExpression);
             }
 
             else {

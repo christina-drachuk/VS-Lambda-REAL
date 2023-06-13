@@ -8,12 +8,12 @@ public class Application implements Expression {
         this.rightExp = rightExp;
     }
 
-    public Expression sub(Variable var, Expression exp) {
-        return new Application(this.leftExp.sub(var, exp), this.rightExp.sub(var, exp));
+    public Expression substitute(Variable var, Expression exp) {
+        return new Application(this.leftExp.substitute(var, exp), this.rightExp.substitute(var, exp));
     }
 
-    public Application copy() {
-        return new Application(leftExp.copy(), rightExp.copy());
+    public Application deepCopy() {
+        return new Application(leftExp.deepCopy(), rightExp.deepCopy());
     }
 
     public boolean equals(Expression other) {

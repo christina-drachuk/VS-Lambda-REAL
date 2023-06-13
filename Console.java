@@ -32,7 +32,7 @@ public class Console {
 		Lexer lexer = new Lexer();
 		Parser parser = new Parser();
 		
-		String input = cleanConsoleInput();  // see comment
+		String input = cleanConsoleInput();
 		
 		while (! input.equalsIgnoreCase("exit")) {
 			latestPrint = "";
@@ -71,18 +71,8 @@ public class Console {
 
 			else if (tokens.size() > 1 && tokens.get(0).equalsIgnoreCase("run")) {
 
-
-				// Make a parsed expression *parser.parse()
-
-				// make the run method take two expressions, feed it the same thing twice
-
-				
-
 				Expression output = Runner.run(parser.parse(new ArrayList<>(tokens.subList(1, tokens.size()))));
 				
-
-
-
 				boolean replaced = false;
 				for (Entry<String, Expression> setVar : vars.entrySet()) {
 					System.out.print(setVar.getKey() + " : ");
@@ -102,15 +92,11 @@ public class Console {
 
 				latestPrint = output.toString();
 				if (!replaced) System.out.println(output);
-				// Runner.run(parser.parse(new ArrayList<>(tokens.subList(1, tokens.size()))));
 
 				input = cleanConsoleInput();
 			}
 			
 			else {
-				
-
-
 
 				String output = "";
 				

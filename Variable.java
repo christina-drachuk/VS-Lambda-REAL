@@ -7,7 +7,7 @@ public class Variable implements Expression {
         this.varName = varName;
     }
 
-    public Expression sub(Variable var, Expression exp) {
+    public Expression substitute(Variable var, Expression exp) {
         if (this.equals(var)) {
             return exp;
         }
@@ -26,7 +26,7 @@ public class Variable implements Expression {
         return varName;
     }
 
-    public Variable copy() {
+    public Variable deepCopy() {
         return new Variable(varName);
     }
 }
