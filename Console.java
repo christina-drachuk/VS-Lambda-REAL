@@ -101,7 +101,7 @@ public class Console {
 				int rightBound = leftBound;
 				if (tokens.size() > 2) rightBound = Integer.parseInt(tokens.get(2));
 
-				if (rightBound > leftBound) {
+				if (rightBound < leftBound) {
 					int temp = rightBound;
 					rightBound = leftBound;
 					leftBound = temp;
@@ -129,7 +129,7 @@ public class Console {
 
 					else {
 						vars.put(Integer.toString(i), current);
-						System.out.println("Added " + Integer.toString(i) + " as " + current);
+						System.out.println("Added " + current + " as " + Integer.toString(i));
 					}
 					
 				}

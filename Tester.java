@@ -232,7 +232,7 @@ public class Tester {
 
 					else {
 						vars.put(Integer.toString(i), current);
-						System.out.println("Added " + Integer.toString(i) + " as " + current);
+						System.out.println("Added " + current + " as " + Integer.toString(i));
 					}
 					
 				}
