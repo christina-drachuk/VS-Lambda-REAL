@@ -198,6 +198,56 @@ public class Tester {
 				// Runner.run(parser.parse(new ArrayList<>(tokens.subList(1, tokens.size()))));
 
 			}
+
+			else if (tokens.size() > 1 && tokens.get(0).equalsIgnoreCase("populate")) {
+				int leftBound = Integer.parseInt(tokens.get(1));
+				int rightBound = leftBound;
+				if (tokens.size() > 2) rightBound = Integer.parseInt(tokens.get(2));
+
+				if (rightBound < leftBound) {
+					int temp = rightBound;
+					rightBound = leftBound;
+					leftBound = temp;
+				}
+
+
+				Expression succ = parser.parse(lexer.tokenize("(λn.(λf.(λx.(f ((n f) x)))))"));
+				Expression current = parser.parse(lexer.tokenize("\\f.\\x.x"));
+
+				for (int i = 1; i < leftBound; i++) {
+					current = Runner.run(parser.parse(lexer.tokenize(succ.toString() + " " + current.toString())));
+
+				}
+
+				for (int i = leftBound; i < rightBound + 1; i++) {
+
+					if (i != 0) {
+						current = Runner.run(parser.parse(lexer.tokenize(succ.toString() + " " + current.toString())));
+					}
+
+
+					if (vars.containsKey(Integer.toString(i))) {
+						System.out.println(Integer.toString(i) + " is already defined. ");
+					}
+
+					else {
+						vars.put(Integer.toString(i), current);
+						System.out.println("Added " + Integer.toString(i) + " as " + current);
+					}
+					
+				}
+
+				if (leftBound == rightBound) {
+					System.out.println("Populated " + leftBound + ".");
+				}
+
+				else {
+					// System.out.println("Populated numbers "  + leftBound +  " to " + rightBound);
+					latestPrint = "Populated numbers "  + leftBound +  " to " + rightBound;
+				}
+
+				
+			}
 			
 			else {
 				
